@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ binding_site.name or 'Binding Site Details' }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('web.index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('web.list_binding_sites') }}">Binding Sites</a></li>
+            <li class="breadcrumb-item active">{{ binding_site.name or 'Binding Site Details' }}</li>
+        </ol>
+    </nav>
+
+    <div class="card bg-dark mb-4">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0">{{ binding_site.name or 'Unnamed Binding Site' }}</h3>
+                <a href="{{ url_for('web.docking_page') }}?binding_site={{ binding_site.id }}" class="btn btn-info">
+                    <i class="fas fa-vial"></i> Dock Molecule
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <h5>Basic Information</h5>
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <th>ID</th>
+                                    <td>{{ binding_site.id }}</td>
+                                </tr>
+                                {% if binding_site.protein_id %}
+                                <tr>
+                                    <th>Protein ID</th>
+                                    <td>{{ binding_site.protein_id }}</td>
+                                </tr>
+                                {% endif %}
+                                {% if binding_site.coordinates %}
+                                <tr>
+                                    <th>Coordinates</th>
+                                    <td>
+                                        X: {{ '%.2f'|format(binding_site.coordinates[0]) }}, 
+                                        Y: {{ '%.2f'|format(binding_site.coordinates[1]) }}, 
+                                        Z: {{ '%.2f'|format(binding_site.coordinates[2]) }}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <h5>Properties</h5>
+                        {% if binding_site.properties %}
+                        <table class="table table-sm">
+                            <tbody>
+                                {% for key, value in binding_site.properties.items() %}
+                                <tr>
+                                    <th>{{ key | replace('_', ' ') | title }}</th>
+                                    <td>
+                                        {% if value is number %}
+                                            {{ '%.2f'|format(value) }}
+                                        {% else %}
+                                            {{ value }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <p class="text-muted">No properties available</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <h5>Binding Site Visualization</h5>
+                <div class="binding-site-visualization p-4 text-center bg-gray-800 rounded">
+                    <!-- In a real application, this would be a 3D visualization of the binding site -->
+                    <div style="min-height: 300px; display: flex; align-items: center; justify-content: center;">
+                        <div class="text-center">
+                            <i class="fas fa-cube fa-5x mb-3 text-info"></i>
+                            <p class="text-muted">
+                                Binding site visualization would appear here.
+                                <br>
+                                Coordinates: 
+                                {% if binding_site.coordinates %}
+                                ({{ '%.2f'|format(binding_site.coordinates[0]) }}, 
+                                {{ '%.2f'|format(binding_site.coordinates[1]) }}, 
+                                {{ '%.2f'|format(binding_site.coordinates[2]) }})
+                                {% else %}
+                                Unknown
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card bg-dark mb-4">
+        <div class="card-header">
+            <h4 class="card-title">Compatible Molecules</h4>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">Dock molecules with this binding site to see compatibility analysis.</p>
+            <a href="{{ url_for('web.docking_page') }}?binding_site={{ binding_site.id }}" class="btn btn-info">
+                <i class="fas fa-vial"></i> Go to Docking Interface
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

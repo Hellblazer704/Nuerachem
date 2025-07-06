@@ -1,0 +1,594 @@
+{% extends 'base.html' %}
+
+{% block title %}Docking Result - Neural Chem AI{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('web.index') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('web.docking_page') }}">Docking</a></li>
+            <li class="breadcrumb-item active">Result Analysis</li>
+        </ol>
+    </nav>
+
+    <div class="card bg-dark mb-4">
+        <div class="card-header bg-info bg-opacity-25">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0">Docking Result Analysis</h3>
+                <div>
+                    <a href="{{ url_for('web.docking_page') }}" class="btn btn-outline-light btn-sm">
+                        <i class="fas fa-arrow-left"></i> Back to Docking
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h4>Molecule Information</h4>
+                    <table class="table table-sm">
+                        <tbody>
+                            <tr>
+                                <th>Name</th>
+                                <td>{{ result.molecule.name or 'Unnamed Molecule' }}</td>
+                            </tr>
+                            <tr>
+                                <th>SMILES</th>
+                                <td><code>{{ result.molecule.smiles }}</code></td>
+                            </tr>
+                            {% if result.molecule.properties %}
+                            <tr>
+                                <th>Properties</th>
+                                <td>
+                                    <ul class="list-unstyled mb-0">
+                                        {% for key, value in result.molecule.properties.items() %}
+                                        <li>
+                                            <strong>{{ key | replace('_', ' ') | title }}:</strong>
+                                            {% if value is number %}
+                                                {{ '%.2f'|format(value) }}
+                                            {% else %}
+                                                {{ value }}
+                                            {% endif %}
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            <tr>
+                                <th>Structure</th>
+                                <td>
+                                    {% if result.molecule.svg %}
+                                    <div class="molecule-svg">
+                                        {{ result.molecule.svg|safe }}
+                                    </div>
+                                    {% else %}
+                                    <i class="text-muted">No structure available</i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a href="{{ url_for('web.view_molecule', molecule_id=result.molecule.id) }}" class="btn btn-sm btn-outline-info">
+                        <i class="fas fa-external-link-alt"></i> Full Molecule Details
+                    </a>
+                </div>
+                
+                <div class="col-md-6">
+                    <h4>Binding Site Information</h4>
+                    <table class="table table-sm">
+                        <tbody>
+                            <tr>
+                                <th>Name</th>
+                                <td>{{ result.binding_site.name or 'Unnamed Binding Site' }}</td>
+                            </tr>
+                            {% if result.binding_site.protein_id %}
+                            <tr>
+                                <th>Protein ID</th>
+                                <td>{{ result.binding_site.protein_id }}</td>
+                            </tr>
+                            {% endif %}
+                            {% if result.binding_site.coordinates %}
+                            <tr>
+                                <th>Coordinates</th>
+                                <td>
+                                    X: {{ '%.2f'|format(result.binding_site.coordinates[0]) }}, 
+                                    Y: {{ '%.2f'|format(result.binding_site.coordinates[1]) }}, 
+                                    Z: {{ '%.2f'|format(result.binding_site.coordinates[2]) }}
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% if result.binding_site.properties %}
+                            <tr>
+                                <th>Properties</th>
+                                <td>
+                                    <ul class="list-unstyled mb-0">
+                                        {% for key, value in result.binding_site.properties.items() %}
+                                        <li>
+                                            <strong>{{ key | replace('_', ' ') | title }}:</strong>
+                                            {% if value is number %}
+                                                {{ '%.2f'|format(value) }}
+                                            {% else %}
+                                                {{ value }}
+                                            {% endif %}
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    <a href="{{ url_for('web.view_binding_site', binding_site_id=result.binding_site.id) }}" class="btn btn-sm btn-outline-info">
+                        <i class="fas fa-external-link-alt"></i> Full Binding Site Details
+                    </a>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h4 class="mb-3">Docking Analysis</h4>
+                    <div class="card bg-dark bg-opacity-50 mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-4 text-center border-end">
+                                    <h5>Binding Affinity</h5>
+                                    <div class="display-4 mb-2 text-info">
+                                        {% if result.binding_affinity is defined %}
+                                            {{ '%.1f'|format(result.binding_affinity) }}
+                                        {% elif result.score is defined %}
+                                            {{ '%.1f'|format(result.score) }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </div>
+                                    <p class="text-muted">kcal/mol</p>
+                                </div>
+                                
+                                <div class="col-md-8">
+                                    <h5>Binding Analysis</h5>
+                                    
+                                    {% if result.interactions %}
+                                    <div class="mb-3">
+                                        <h6>Molecular Interactions</h6>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Type</th>
+                                                        <th>Strength</th>
+                                                        <th>Description</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for interaction in result.interactions %}
+                                                    <tr>
+                                                        <td>{{ interaction.type }}</td>
+                                                        <td>
+                                                            {% if interaction.strength is defined %}
+                                                                {% set strength = interaction.strength %}
+                                                                <div class="progress" style="height: 15px;">
+                                                                    <div class="progress-bar bg-info" role="progressbar"
+                                                                         style="width: {{ (strength * 100)|round }}%;"
+                                                                         aria-valuenow="{{ (strength * 100)|round }}" aria-valuemin="0" aria-valuemax="100">
+                                                                        {{ (strength * 100)|round }}%
+                                                                    </div>
+                                                                </div>
+                                                            {% else %}
+                                                                N/A
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ interaction.description }}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <p class="text-muted">No detailed interaction data available.</p>
+                                    {% endif %}
+                                    
+                                    <div class="mb-3">
+                                        <h6>Binding Quality Assessment</h6>
+                                        {% if result.binding_affinity is defined %}
+                                            {% set binding_score = result.binding_affinity %}
+                                            {% if binding_score < -8.0 %}
+                                                <div class="alert alert-success">
+                                                    <i class="fas fa-check-circle"></i> <strong>Excellent Binding Potential</strong>
+                                                    <p class="mb-0">The binding affinity indicates very strong interaction.</p>
+                                                </div>
+                                            {% elif binding_score < -5.0 %}
+                                                <div class="alert alert-info">
+                                                    <i class="fas fa-info-circle"></i> <strong>Good Binding Potential</strong>
+                                                    <p class="mb-0">The binding affinity indicates favorable interaction.</p>
+                                                </div>
+                                            {% elif binding_score < -3.0 %}
+                                                <div class="alert alert-warning">
+                                                    <i class="fas fa-exclamation-triangle"></i> <strong>Moderate Binding Potential</strong>
+                                                    <p class="mb-0">The binding affinity indicates possible weak interaction.</p>
+                                                </div>
+                                            {% else %}
+                                                <div class="alert alert-danger">
+                                                    <i class="fas fa-times-circle"></i> <strong>Poor Binding Potential</strong>
+                                                    <p class="mb-0">The binding affinity indicates minimal or unfavorable interaction.</p>
+                                                </div>
+                                            {% endif %}
+                                        {% else %}
+                                            <p class="text-muted">Binding quality assessment not available.</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0">AI-Powered Binding Improvement Suggestions</h4>
+                        <button id="get-suggestions-btn" class="btn btn-info btn-sm">
+                            <i class="fas fa-lightbulb"></i> Generate Suggestions
+                        </button>
+                    </div>
+                    
+                    <div id="binding-suggestions-container" class="card bg-dark border-info d-none">
+                        <div class="card-header bg-info bg-opacity-25">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-brain"></i> Neural Chem AI Suggestions
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-5 mb-4">
+                                    <h6 class="border-bottom pb-2 mb-3">Enhanced Molecular Properties</h6>
+                                    <div id="additional-properties">
+                                        <div class="text-center py-3">
+                                            <div class="spinner-border spinner-border-sm text-info" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <span class="ms-2">Calculating properties...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-7 mb-4">
+                                    <h6 class="border-bottom pb-2 mb-3">Binding Improvement Strategies</h6>
+                                    <div id="binding-suggestions">
+                                        <div class="text-center py-3">
+                                            <div class="spinner-border spinner-border-sm text-info" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <span class="ms-2">Analyzing research literature...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h6 class="border-bottom pb-2 mb-3">Relevant Literature</h6>
+                                    <div id="literature-examples">
+                                        <div class="text-center py-3">
+                                            <div class="spinner-border spinner-border-sm text-info" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <span class="ms-2">Finding similar cases in literature...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i> Suggestions are based on literature analysis and machine learning models analyzing similar compounds and binding sites.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Visualization</h4>
+                    <div class="visualization-container bg-dark p-4 rounded mb-3" style="min-height: 300px;">
+                        <div class="text-center py-5">
+                            <i class="fas fa-cubes fa-5x mb-3 text-info"></i>
+                            <p class="text-muted">
+                                Interactive docking visualization would display here.
+                                <br>
+                                The docking pose shows the predicted orientation of the molecule within the binding site.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('web.docking_page') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Docking
+                </a>
+                <a href="{{ url_for('web.docking_page') }}?molecule={{ result.molecule.id }}&binding_site={{ result.binding_site.id }}" class="btn btn-info">
+                    <i class="fas fa-redo"></i> Re-run with Same Parameters
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+.molecule-svg {
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.molecule-svg svg {
+    max-width: 100%;
+    max-height: 200px;
+}
+
+.suggestion-card {
+    transition: all 0.2s ease;
+    border-left: 4px solid var(--bs-info);
+}
+
+.suggestion-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.confidence-badge {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.literature-item {
+    border-left: 3px solid var(--bs-gray-700);
+    padding-left: 1rem;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+}
+
+.literature-item:hover {
+    border-left-color: var(--bs-info);
+}
+
+.property-item {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+    background-color: rgba(0,0,0,0.2);
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const getSuggestionsBtn = document.getElementById('get-suggestions-btn');
+    const suggestionsContainer = document.getElementById('binding-suggestions-container');
+    const additionalPropertiesContainer = document.getElementById('additional-properties');
+    const bindingSuggestionsContainer = document.getElementById('binding-suggestions');
+    const literatureExamplesContainer = document.getElementById('literature-examples');
+    
+    // Reference to molecule and binding site IDs
+    const moleculeId = '{{ result.molecule.id }}';
+    const bindingSiteId = '{{ result.binding_site.id }}';
+    
+    // Function to handle the "Generate Suggestions" button click
+    getSuggestionsBtn.addEventListener('click', function() {
+        // Show the suggestions container
+        suggestionsContainer.classList.remove('d-none');
+        
+        // Disable the button while loading
+        getSuggestionsBtn.disabled = true;
+        getSuggestionsBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        
+        // Make the API call
+        fetch('/api/docking/improvement-suggestions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                molecule_id: moleculeId,
+                binding_site_id: bindingSiteId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Process and display the data
+                displayAdditionalProperties(data.data.additional_properties);
+                displayBindingSuggestions(data.data.improvement_suggestions);
+                displayLiteratureExamples(data.data.literature_examples);
+                
+                // Re-enable the button
+                getSuggestionsBtn.disabled = false;
+                getSuggestionsBtn.innerHTML = '<i class="fas fa-lightbulb"></i> Refresh Suggestions';
+            } else {
+                handleSuggestionsError(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching suggestions:', error);
+            handleSuggestionsError(error.message);
+        });
+    });
+    
+    // Display additional molecular properties
+    function displayAdditionalProperties(properties) {
+        if (!properties || Object.keys(properties).length === 0) {
+            additionalPropertiesContainer.innerHTML = `
+                <div class="alert alert-secondary">
+                    <i class="fas fa-info-circle"></i> No additional properties found.
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '<div class="row">';
+        
+        // Property mappings
+        const propertyLabels = {
+            'h_bond_donors': 'H-Bond Donors',
+            'h_bond_acceptors': 'H-Bond Acceptors',
+            'h_atoms': 'Hydrogen Atoms',
+            'logp': 'LogP (Lipophilicity)'
+        };
+        
+        // Property icons
+        const propertyIcons = {
+            'h_bond_donors': 'fa-tint',
+            'h_bond_acceptors': 'fa-magnet',
+            'h_atoms': 'fa-atom',
+            'logp': 'fa-water'
+        };
+        
+        for (const [key, value] of Object.entries(properties)) {
+            const label = propertyLabels[key] || key.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+            const icon = propertyIcons[key] || 'fa-flask';
+            
+            html += `
+                <div class="col-12">
+                    <div class="property-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fas ${icon} me-2 text-info"></i>
+                                <strong>${label}:</strong>
+                            </div>
+                            <span>${value}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        html += '</div>';
+        additionalPropertiesContainer.innerHTML = html;
+    }
+    
+    // Display binding improvement suggestions
+    function displayBindingSuggestions(suggestions) {
+        if (!suggestions || suggestions.length === 0) {
+            bindingSuggestionsContainer.innerHTML = `
+                <div class="alert alert-secondary">
+                    <i class="fas fa-info-circle"></i> No improvement suggestions found.
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        
+        suggestions.forEach((suggestion, index) => {
+            // Get confidence level class
+            let confidenceClass = 'bg-secondary';
+            if (suggestion.confidence >= 0.8) {
+                confidenceClass = 'bg-success';
+            } else if (suggestion.confidence >= 0.5) {
+                confidenceClass = 'bg-info';
+            } else if (suggestion.confidence >= 0.3) {
+                confidenceClass = 'bg-warning';
+            }
+            
+            html += `
+                <div class="suggestion-card card bg-dark mb-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">${suggestion.category}</h6>
+                        <span class="badge ${confidenceClass} confidence-badge">
+                            ${Math.round(suggestion.confidence * 100)}% Confidence
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <p>${suggestion.description}</p>
+                        ${suggestion.alternatives && suggestion.alternatives.length > 0 ? `
+                            <div class="mt-2">
+                                <small class="text-muted">Alternative approaches:</small>
+                                <ul class="small">
+                                    ${suggestion.alternatives.map(alt => `<li>${alt}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        });
+        
+        bindingSuggestionsContainer.innerHTML = html;
+    }
+    
+    // Display literature examples
+    function displayLiteratureExamples(examples) {
+        if (!examples || examples.length === 0) {
+            literatureExamplesContainer.innerHTML = `
+                <div class="alert alert-secondary">
+                    <i class="fas fa-info-circle"></i> No literature examples found.
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        
+        examples.forEach(example => {
+            const relevancePercent = Math.round(example.relevance * 100);
+            
+            html += `
+                <div class="literature-item">
+                    <div class="d-flex justify-content-between">
+                        <h6>${example.title}</h6>
+                        <span class="badge bg-info">${relevancePercent}% Match</span>
+                    </div>
+                    <div class="text-muted small mb-2">
+                        ${example.authors} | ${example.journal} (${example.year})
+                        ${example.doi ? `| <a href="https://doi.org/${example.doi}" target="_blank">${example.doi}</a>` : ''}
+                    </div>
+                    <div class="alert alert-info alert-sm">
+                        <i class="fas fa-quote-left fa-xs me-1"></i>
+                        ${example.finding}
+                        <i class="fas fa-quote-right fa-xs ms-1"></i>
+                    </div>
+                </div>
+            `;
+        });
+        
+        literatureExamplesContainer.innerHTML = html;
+    }
+    
+    // Handle errors in the suggestions API call
+    function handleSuggestionsError(message) {
+        additionalPropertiesContainer.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i> Unable to load properties.
+            </div>
+        `;
+        
+        bindingSuggestionsContainer.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i> Unable to generate binding suggestions.
+            </div>
+        `;
+        
+        literatureExamplesContainer.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i> Unable to load literature examples.
+                <p class="small mb-0">Error: ${message || 'Unknown error'}</p>
+            </div>
+        `;
+        
+        // Re-enable the button
+        getSuggestionsBtn.disabled = false;
+        getSuggestionsBtn.innerHTML = '<i class="fas fa-lightbulb"></i> Try Again';
+    }
+});
+</script>
+{% endblock %}

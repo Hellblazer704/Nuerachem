@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block title %}Molecular Docking - Neural Chem AI{% endblock %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('web.index') }}">Home</a></li>
+            <li class="breadcrumb-item active">Molecular Docking</li>
+        </ol>
+    </nav>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card bg-dark">
+                <div class="card-header">
+                    <h3 class="card-title">Molecular Docking Simulation</h3>
+                </div>
+                <div class="card-body">
+                    <p>Select a molecule and binding site to predict their binding interactions.</p>
+                    
+                    <form method="POST" action="{{ url_for('web.perform_docking') }}" class="needs-validation" novalidate>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="molecule_id" class="form-label">Molecule</label>
+                                <select class="form-select" id="molecule_id" name="molecule_id" required>
+                                    <option value="" disabled selected>Select a molecule</option>
+                                    {% for molecule in molecules %}
+                                    <option value="{{ molecule.id }}">{{ molecule.name or molecule.smiles or 'Unnamed Molecule' }}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="invalid-feedback">Please select a molecule</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="binding_site_id" class="form-label">Binding Site</label>
+                                <select class="form-select" id="binding_site_id" name="binding_site_id" required>
+                                    <option value="" disabled selected>Select a binding site</option>
+                                    {% for site in binding_sites %}
+                                    <option value="{{ site.id }}" {% if request.args.get('binding_site') == site.id %}selected{% endif %}>
+                                        {{ site.name or 'Unnamed Binding Site' }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="invalid-feedback">Please select a binding site</div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-flask"></i> Perform Docking Simulation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if docking_results %}
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card bg-dark">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0">Recent Docking Results</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Molecule</th>
+                                    <th>Binding Site</th>
+                                    <th>Binding Score</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in docking_results %}
+                                <tr>
+                                    <td>{{ result.molecule.name or result.molecule.smiles or 'Unnamed Molecule' }}</td>
+                                    <td>{{ result.binding_site.name or 'Unnamed Binding Site' }}</td>
+                                    <td>
+                                        {% if result.score is defined %}
+                                            {{ '%.2f'|format(result.score) }}
+                                        {% elif result.binding_affinity is defined %}
+                                            {{ '%.2f'|format(result.binding_affinity) }} kcal/mol
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if result.id is defined and result.id %}
+                                        <a href="{{ url_for('web.view_docking_result', result_id=result.id) }}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                        {% else %}
+                                        <button class="btn btn-sm btn-secondary" disabled>
+                                            <i class="fas fa-eye-slash"></i> No ID
+                                        </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card bg-dark h-100">
+                <div class="card-header">
+                    <h4 class="card-title">What is Molecular Docking?</h4>
+                </div>
+                <div class="card-body">
+                    <p>
+                        Molecular docking is a computational method that predicts how a molecule (ligand) 
+                        will interact with a specific binding site on a protein. The process simulates the 
+                        binding between the molecule and the target site to analyze compatibility and binding strength.
+                    </p>
+                    <p>
+                        Our Neural Chem AI algorithm leverages advanced machine learning techniques to predict:
+                    </p>
+                    <ul>
+                        <li>Binding affinities (how strongly molecules bind)</li>
+                        <li>Interaction patterns between molecules and binding sites</li>
+                        <li>Potential therapeutic or toxicological effects</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="card bg-dark h-100">
+                <div class="card-header">
+                    <h4 class="card-title">How to Use This Tool</h4>
+                </div>
+                <div class="card-body">
+                    <ol>
+                        <li>Select a molecule from your library (or <a href="{{ url_for('web.add_molecule') }}">add a new one</a>)</li>
+                        <li>Select a binding site (or <a href="{{ url_for('web.add_binding_site') }}">add a new one</a>)</li>
+                        <li>Click "Perform Docking Simulation" to run the prediction</li>
+                        <li>Review detailed results including:
+                            <ul>
+                                <li>Binding affinity (energy score)</li>
+                                <li>Interactive visualization</li>
+                                <li>Molecular interactions</li>
+                                <li>Structure-activity predictions</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation
+    const form = document.querySelector('form');
+    
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        
+        form.classList.add('was-validated');
+    });
+    
+    // Pre-select binding site if provided in URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const bindingSiteParam = urlParams.get('binding_site');
+    const moleculeParam = urlParams.get('molecule');
+    
+    if (bindingSiteParam) {
+        const bindingSiteSelect = document.getElementById('binding_site_id');
+        const option = Array.from(bindingSiteSelect.options).find(opt => opt.value === bindingSiteParam);
+        if (option) {
+            option.selected = true;
+        }
+    }
+    
+    if (moleculeParam) {
+        const moleculeSelect = document.getElementById('molecule_id');
+        const option = Array.from(moleculeSelect.options).find(opt => opt.value === moleculeParam);
+        if (option) {
+            option.selected = true;
+        }
+    }
+});
+</script>
+{% endblock %}

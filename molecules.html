@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Molecules{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Molecule Library</h1>
+    <a href="{{ url_for('web.add_molecule') }}" class="btn btn-info">
+        <i class="fas fa-plus-circle"></i> Add Molecule
+    </a>
+</div>
+
+<div class="row">
+    {% if molecules %}
+        {% for molecule in molecules %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="molecule-container">
+                <h5>{{ molecule.name or 'Unnamed Molecule' }}</h5>
+                
+                <div class="molecule-svg">
+                    {% if molecule.svg %}
+                        {{ molecule.svg | safe }}
+                    {% else %}
+                        <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="100%" height="100%" fill="#343a40" />
+                            <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#f8f9fa">
+                                Visualization unavailable
+                            </text>
+                        </svg>
+                    {% endif %}
+                </div>
+                
+                <div class="molecule-details">
+                    {% if molecule.smiles %}
+                    <div class="mb-2">
+                        <small class="text-muted">SMILES:</small>
+                        <code class="d-block small text-truncate">{{ molecule.smiles }}</code>
+                    </div>
+                    {% endif %}
+                    
+                    {% if molecule.properties %}
+                    <div class="molecule-properties">
+                        <small class="text-muted">Properties:</small>
+                        <div class="row g-2 mt-1">
+                            {% for key, value in molecule.properties.items() %}
+                            <div class="col-6">
+                                <div class="d-flex justify-content-between">
+                                    <span class="small">{{ key | replace('_', ' ') | title }}</span>
+                                    <span class="small text-muted">{{ value }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="mt-3">
+                    <a href="#" class="btn btn-sm btn-outline-info me-2">
+                        <i class="fas fa-eye"></i> View
+                    </a>
+                    <a href="#" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-cubes"></i> 3D View
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> No molecules in the library yet. 
+                <a href="{{ url_for('web.add_molecule') }}" class="alert-link">Add your first molecule</a>.
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

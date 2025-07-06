@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Binding Site - Neural Chem AI{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Add New Binding Site</h2>
+    
+    <div class="card bg-dark">
+        <div class="card-header">
+            <h5 class="card-title">Binding Site Information</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('web.add_binding_site') }}" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Binding Site Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                    <div class="invalid-feedback">Please provide a name for the binding site.</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="protein_id" class="form-label">Protein ID</label>
+                    <input type="text" class="form-control" id="protein_id" name="protein_id" placeholder="e.g., P23219">
+                    <small class="form-text text-muted">
+                        UniProt or other standard protein identifier.
+                    </small>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="coordinates" class="form-label">3D Coordinates (X,Y,Z)</label>
+                    <input type="text" class="form-control" id="coordinates" name="coordinates" 
+                           placeholder="e.g., 23.4, 45.6, 12.3">
+                    <small class="form-text text-muted">
+                        Comma-separated coordinates in 3D space. Default is 0,0,0 if not provided.
+                    </small>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Add Binding Site</button>
+                    <a href="{{ url_for('web.list_binding_sites') }}" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
+            form.classList.add('was-validated');
+        });
+    });
+</script>
+{% endblock %}

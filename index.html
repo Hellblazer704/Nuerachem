@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 text-center mb-5">
+        <h1 class="display-4">Neural Chem AI</h1>
+        <p class="lead">Advanced Molecular Analysis and Visualization Platform</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-atom fa-3x mb-3 text-info"></i>
+                <h5 class="card-title">Molecule Visualization</h5>
+                <p class="card-text">Visualize molecular structures with our advanced 2D and 3D rendering engine.</p>
+                <a href="{{ url_for('web.list_molecules') }}" class="btn btn-outline-info">View Molecules</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-vial fa-3x mb-3 text-info"></i>
+                <h5 class="card-title">Binding Site Analysis</h5>
+                <p class="card-text">Analyze protein binding sites to understand molecular interactions.</p>
+                <a href="{{ url_for('web.list_binding_sites') }}" class="btn btn-outline-info">Explore Binding Sites</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-microscope fa-3x mb-3 text-info"></i>
+                <h5 class="card-title">Molecular Docking</h5>
+                <p class="card-text">Predict how molecules interact with binding sites using AI-powered models.</p>
+                <a href="{{ url_for('web.docking_page') }}" class="btn btn-outline-info">Try Docking</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-12">
+        <div class="card bg-dark">
+            <div class="card-body">
+                <h3 class="card-title">Quick Start</h3>
+                <p class="card-text">Get started with Neural Chem AI by adding a molecule:</p>
+                
+                <form action="{{ url_for('api.create_molecule') }}" method="POST" class="mt-4" id="quick-add-form">
+                    <div class="mb-3">
+                        <label for="smiles" class="form-label">SMILES Notation</label>
+                        <input type="text" class="form-control" id="smiles" name="smiles" placeholder="e.g., CC(=O)OC1=CC=CC=C1C(=O)O">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Molecule Name (optional)</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="e.g., Aspirin">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-info">Add Molecule</button>
+                </form>
+                
+                <div id="result-container" class="mt-4 d-none">
+                    <h4>Visualization Result:</h4>
+                    <div class="molecule-container">
+                        <div class="molecule-svg" id="result-svg"></div>
+                        <div class="molecule-properties" id="result-properties"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('quick-add-form');
+    const resultContainer = document.getElementById('result-container');
+    const resultSvg = document.getElementById('result-svg');
+    const resultProperties = document.getElementById('result-properties');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            smiles: document.getElementById('smiles').value,
+            name: document.getElementById('name').value
+        };
+        
+        fetch('/api/molecules', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                resultContainer.classList.remove('d-none');
+                
+                // Display the SVG
+                if (data.data.svg) {
+                    resultSvg.innerHTML = data.data.svg;
+                } else {
+                    resultSvg.innerHTML = `
+                        <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="100%" height="100%" fill="#343a40" />
+                            <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="#f8f9fa">
+                                Visualization unavailable
+                            </text>
+                        </svg>
+                    `;
+                }
+                
+                // Display properties
+                displayMoleculeProperties(data.data, { querySelector: () => resultProperties });
+                
+                // Initialize the viewer
+                initializeMoleculeViewers();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred: ' + error.message);
+        });
+    });
+});
+</script>
+{% endblock %}

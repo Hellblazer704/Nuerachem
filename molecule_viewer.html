@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <script src="https://3dmol.csb.pitt.edu/build/3Dmol-min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Molecule Viewer</h3>
+            </div>
+            <div class="card-body">
+                <div id="molecule-viewer" style="height: 500px; width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h3>Controls</h3>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button id="play-animation" class="btn btn-primary">Play Animation</button>
+                    <button id="analyze-structure" class="btn btn-secondary">Analyze Structure</button>
+                </div>
+                <div id="analysis-results" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="status" class="alert alert-danger mt-3" style="display: none;"></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/moleculeViewer.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            const viewer = new MoleculeViewer('molecule-viewer');
+            const moleculeId = '{{ molecule_id }}';
+            const dockingId = '{{ docking_id }}';
+
+            // Initialize viewer with molecule
+            viewer.loadMolecule(moleculeId).catch(error => {
+                showError('Failed to load molecule: ' + error.message);
+            });
+
+            // Setup event listeners
+            document.getElementById('play-animation').addEventListener('click', () => {
+                viewer.showDockingAnimation(dockingId).catch(error => {
+                    showError('Animation failed: ' + error.message);
+                });
+            });
+
+            document.getElementById('analyze-structure').addEventListener('click', () => {
+                viewer.showAnalysis(moleculeId).catch(error => {
+                    showError('Analysis failed: ' + error.message);
+                });
+            });
+        } catch (error) {
+            showError('Initialization error: ' + error.message);
+        }
+    });
+
+    function showError(message) {
+        const statusDiv = document.getElementById('status');
+        statusDiv.textContent = message;
+        statusDiv.style.display = 'block';
+    }
+</script>
+{% endblock %}

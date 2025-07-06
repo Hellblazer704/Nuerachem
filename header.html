@@ -1,0 +1,51 @@
+<header class="app-header">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="{{ url_for('web.index') }}">
+                    <svg class="app-logo" width="40" height="40" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="256" cy="256" r="250" fill="#000" stroke="#00b5d1" stroke-width="12"/>
+                        <!-- Simplified rocket icon (neon style) -->
+                        <path fill="none" stroke="#00b5d1" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" d="M256 120 c-20 0 -36 16 -36 36 v100 l-20 80 h112 l-20 -80 v-100 c0 -20 -16 -36 -36 -36z"/>
+                        <circle cx="256" cy="180" r="15" fill="none" stroke="#00b5d1" stroke-width="8"/>
+                        <path fill="none" stroke="#00b5d1" stroke-width="8" stroke-linecap="round" d="M256 320 v30 M236 350 c0 0 10 20 20 20 c10 0 20 -20 20 -20"/>
+                        <path fill="none" stroke="#00b5d1" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" d="M150 256 c-50 -120 60 -200 106 -220 c46 20 156 100 106 220 M120 166 a140 140 0 0 1 272 0 M120 346 a140 140 0 0 0 272 0"/>
+                    </svg>
+                    <span>Neural Chem AI</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('web.index') }}">
+                                <i class="fas fa-home"></i> Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('web.list_molecules') }}">
+                                <i class="fas fa-atom"></i> Molecules
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('web.list_binding_sites') }}">
+                                <i class="fas fa-vial"></i> Binding Sites
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('web.docking_page') }}">
+                                <i class="fas fa-microscope"></i> Docking
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-info-circle"></i> About
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>

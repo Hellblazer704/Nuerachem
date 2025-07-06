@@ -1,0 +1,126 @@
+2025-03-27 13:20:25,425 - neural_chem - INFO - Starting Neural Chem AI application
+2025-03-27 13:20:25,525 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.6.109:5000
+2025-03-27 13:20:25,526 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-03-27 13:20:25,530 - werkzeug - INFO -  * Restarting with stat
+2025-03-27 13:20:26,519 - neural_chem - INFO - Starting Neural Chem AI application
+2025-03-27 13:20:26,574 - werkzeug - WARNING -  * Debugger is active!
+2025-03-27 13:20:26,601 - werkzeug - INFO -  * Debugger PIN: 395-543-579
+2025-03-27 13:20:31,148 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:31] "GET /test-viewer HTTP/1.1" 200 -
+2025-03-27 13:20:31,278 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:31] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-03-27 13:20:31,396 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:31] "[36mGET /static/js/moleculeViewer.js HTTP/1.1[0m" 304 -
+2025-03-27 13:20:31,752 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:31] "[35m[1mGET /api/molecules/983ed022-2fd0-452e-a3e3-c886cf8fa648/3d HTTP/1.1[0m" 500 -
+2025-03-27 13:20:36,221 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:36] "GET /test-viewer HTTP/1.1" 200 -
+2025-03-27 13:20:36,538 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:36] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-03-27 13:20:36,573 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:36] "[36mGET /static/js/moleculeViewer.js HTTP/1.1[0m" 304 -
+2025-03-27 13:20:36,936 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:36] "[35m[1mGET /api/molecules/983ed022-2fd0-452e-a3e3-c886cf8fa648/3d HTTP/1.1[0m" 500 -
+2025-03-27 13:20:39,412 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:39] "GET /api/docking/test_dock1/animation HTTP/1.1" 200 -
+2025-03-27 13:20:41,554 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:41] "GET /api/docking/test_dock1/animation HTTP/1.1" 200 -
+2025-03-27 13:20:43,203 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:43] "[35m[1mGET /api/molecules/983ed022-2fd0-452e-a3e3-c886cf8fa648/analysis HTTP/1.1[0m" 500 -
+2025-03-27 13:20:43,860 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:43] "[35m[1mGET /api/molecules/983ed022-2fd0-452e-a3e3-c886cf8fa648/analysis HTTP/1.1[0m" 500 -
+2025-03-27 13:20:45,137 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:45] "GET /api/docking/test_dock1/animation HTTP/1.1" 200 -
+2025-03-27 13:20:47,013 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:47] "[35m[1mGET /api/molecules/983ed022-2fd0-452e-a3e3-c886cf8fa648/analysis HTTP/1.1[0m" 500 -
+2025-03-27 13:20:49,352 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:20:49] "GET /api/docking/test_dock1/animation HTTP/1.1" 200 -
+2025-03-27 13:38:44,377 - werkzeug - INFO -  * Detected change in 'c:\\Users\\srisa\\Desktop\\competitions\\nueral chem\\final version\\RenderPatches\\routes\\visualization_routes.py', reloading
+2025-03-27 13:38:44,665 - werkzeug - INFO -  * Restarting with stat
+2025-03-27 13:38:46,689 - neural_chem - INFO - Starting Neural Chem AI application
+2025-03-27 13:38:46,763 - werkzeug - WARNING -  * Debugger is active!
+2025-03-27 13:38:46,775 - werkzeug - INFO -  * Debugger PIN: 395-543-579
+2025-03-27 13:38:52,072 - werkzeug - INFO -  * Detected change in 'c:\\Users\\srisa\\Desktop\\competitions\\nueral chem\\final version\\RenderPatches\\routes\\visualization_routes.py', reloading
+2025-03-27 13:38:52,504 - werkzeug - INFO -  * Restarting with stat
+2025-03-27 13:38:54,971 - neural_chem - INFO - Starting Neural Chem AI application
+2025-03-27 13:38:55,064 - werkzeug - WARNING -  * Debugger is active!
+2025-03-27 13:38:55,085 - werkzeug - INFO -  * Debugger PIN: 395-543-579
+2025-03-27 13:38:58,449 - werkzeug - INFO -  * Detected change in 'c:\\Users\\srisa\\Desktop\\competitions\\nueral chem\\final version\\RenderPatches\\services\\sample_data.py', reloading
+2025-03-27 13:38:58,672 - werkzeug - INFO -  * Restarting with stat
+2025-03-27 13:39:00,044 - neural_chem - INFO - Starting Neural Chem AI application
+2025-03-27 13:39:00,082 - werkzeug - WARNING -  * Debugger is active!
+2025-03-27 13:39:00,089 - werkzeug - INFO -  * Debugger PIN: 395-543-579
+2025-03-27 13:39:54,000 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:39:54] "GET /test-viewer HTTP/1.1" 200 -
+2025-03-27 13:39:54,238 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:39:54] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-03-27 13:39:54,246 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:39:54] "GET /static/js/moleculeViewer.js HTTP/1.1" 200 -
+2025-03-27 13:39:54,788 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:39:54] "[33mGET /api/molecules/9a96a467-33c3-4417-99f0-72152f7143d6/3d HTTP/1.1[0m" 404 -
+2025-03-27 13:39:58,325 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:39:58] "GET /test-viewer HTTP/1.1" 200 -
+2025-03-27 13:39:58,643 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:39:58] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-03-27 13:39:58,689 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:39:58] "[36mGET /static/js/moleculeViewer.js HTTP/1.1[0m" 304 -
+2025-03-27 13:39:59,090 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:39:59] "[33mGET /api/molecules/9a96a467-33c3-4417-99f0-72152f7143d6/3d HTTP/1.1[0m" 404 -
+2025-03-27 13:39:59,425 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:39:59] "GET /test-viewer HTTP/1.1" 200 -
+2025-03-27 13:39:59,736 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:39:59] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-03-27 13:39:59,770 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:39:59] "[36mGET /static/js/moleculeViewer.js HTTP/1.1[0m" 304 -
+2025-03-27 13:40:00,158 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:40:00] "GET /test-viewer HTTP/1.1" 200 -
+2025-03-27 13:40:00,360 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:40:00] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-03-27 13:40:00,426 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:40:00] "[36mGET /static/js/moleculeViewer.js HTTP/1.1[0m" 304 -
+2025-03-27 13:40:00,533 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:40:00] "[33mGET /api/molecules/9a96a467-33c3-4417-99f0-72152f7143d6/3d HTTP/1.1[0m" 404 -
+2025-03-27 13:40:06,412 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:40:06] "GET /test-viewer HTTP/1.1" 200 -
+2025-03-27 13:40:06,750 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:40:06] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-03-27 13:40:06,759 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:40:06] "[36mGET /static/js/moleculeViewer.js HTTP/1.1[0m" 304 -
+2025-03-27 13:40:07,033 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:40:07] "[33mGET /api/molecules/9a96a467-33c3-4417-99f0-72152f7143d6/3d HTTP/1.1[0m" 404 -
+2025-03-27 13:41:37,098 - routes.web - ERROR - Error rendering index: Could not build url for endpoint 'api.create_molecule'. Did you mean 'api.get_molecule' instead?
+Traceback (most recent call last):
+  File "c:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\routes\web.py", line 25, in index
+    return render_template('index.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "c:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\templates\index.html", line 1, in top-level template code
+    {% extends 'base.html' %}
+  File "c:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\templates\base.html", line 17, in top-level template code
+    {% block content %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\templates\index.html", line 55, in block 'content'
+    <form action="{{ url_for('api.create_molecule') }}" method="POST" class="mt-4" id="quick-add-form">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\werkzeug\routing\map.py", line 924, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'api.create_molecule'. Did you mean 'api.get_molecule' instead?
+2025-03-27 13:41:37,121 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:41:37] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-03-27 13:41:37,604 - routes.web - ERROR - Error rendering index: Could not build url for endpoint 'api.create_molecule'. Did you mean 'api.get_molecule' instead?
+Traceback (most recent call last):
+  File "c:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\routes\web.py", line 25, in index
+    return render_template('index.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\flask\templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "c:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\templates\index.html", line 1, in top-level template code
+    {% extends 'base.html' %}
+  File "c:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\templates\base.html", line 17, in top-level template code
+    {% block content %}{% endblock %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\templates\index.html", line 55, in block 'content'
+    <form action="{{ url_for('api.create_molecule') }}" method="POST" class="mt-4" id="quick-add-form">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\srisa\Desktop\competitions\nueral chem\final version\RenderPatches\venv\Lib\site-packages\werkzeug\routing\map.py", line 924, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'api.create_molecule'. Did you mean 'api.get_molecule' instead?
+2025-03-27 13:41:37,627 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:41:37] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-03-27 13:41:37,850 - werkzeug - INFO - 127.0.0.1 - - [27/Mar/2025 13:41:37] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -

@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Molecule - Neural Chem AI{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Add New Molecule</h2>
+    
+    <div class="card bg-dark">
+        <div class="card-header">
+            <h5 class="card-title">Molecule Information</h5>
+        </div>
+        <div class="card-body">
+            <form id="molecule-form" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="molecule-name" class="form-label">Molecule Name</label>
+                    <input type="text" class="form-control" id="molecule-name" required>
+                    <div class="invalid-feedback">Please provide a name for the molecule.</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="molecule-smiles" class="form-label">SMILES Notation</label>
+                    <input type="text" class="form-control" id="molecule-smiles">
+                    <small class="form-text text-muted">
+                        Simplified Molecular Input Line Entry System (SMILES) representation of the molecule.
+                    </small>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="molecule-file" class="form-label">MOL File (optional)</label>
+                    <textarea class="form-control" id="molecule-file" rows="5"></textarea>
+                    <small class="form-text text-muted">
+                        Paste the content of a MOL file or use the SMILES notation above.
+                    </small>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Add Molecule</button>
+                    <a href="{{ url_for('web.list_molecules') }}" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('molecule-form');
+        
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            // Basic form validation
+            if (!form.checkValidity()) {
+                form.classList.add('was-validated');
+                return;
+            }
+            
+            // Get form data
+            const name = document.getElementById('molecule-name').value;
+            const smiles = document.getElementById('molecule-smiles').value;
+            const molFile = document.getElementById('molecule-file').value;
+            
+            // Require either SMILES or MOL file
+            if (!smiles && !molFile) {
+                alert('Please provide either a SMILES notation or MOL file content.');
+                return;
+            }
+            
+            // Create payload
+            const data = {
+                name: name,
+                smiles: smiles || null,
+                mol_file: molFile || null
+            };
+            
+            // Send API request
+            fetch('/api/molecules', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to create molecule');
+                }
+                return response.json();
+            })
+            .then(result => {
+                if (result.status === 'success') {
+                    // Redirect to molecules list
+                    window.location.href = '/molecules';
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error creating molecule: ' + error.message);
+            });
+        });
+    });
+</script>
+{% endblock %}
